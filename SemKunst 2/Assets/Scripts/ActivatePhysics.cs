@@ -41,7 +41,7 @@ public class ActivatePhysics : MonoBehaviour
 
     IEnumerator TurnKinematic()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(10f);
         canReturn = true;
         rb.isKinematic = true;
     }

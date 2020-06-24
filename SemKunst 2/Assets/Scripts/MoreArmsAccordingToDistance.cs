@@ -9,35 +9,32 @@ public class MoreArmsAccordingToDistance : MonoBehaviour
 
     public List<Transform> targets;
 
-    // Start is called before the first frame update
+    public float speed = 2.5f;
+    public float activeDistance = 3f;
+
     void Start()
     {
-
+        minPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        maxPos = new Vector3(maxPos.x, transform.position.y, transform.position.z);
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
+
         for (int i = 0; i < targets.Count; i++)
         {
+            float smooth = 1.0f - Mathf.Pow(0.5f, Time.deltaTime * speed);
             var distance = Vector3.Distance(this.transform.position, targets[i].transform.position);
             Debug.Log(distance);
-            //float newYpos = Remap(distance,0);
-            this.transform.position = new Vector3(-distance / 4, transform.position.y, transform.position.z);
 
-            Vector3 lTargetDir = m_Target.position - transform.position;
-            lTargetDir.y = 0.0f;
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lTargetDir), Time.time * m_Speed);
+            if(distance < activeDistance)
+            {
+                transform.position = Vector3.Lerp(transform.position, maxPos, smooth);
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(transform.position, minPos, smooth);
+            }
         }
     }
-
-    public float Remap(float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
-    }
-
-    [SerializeField]
-    private Transform m_Target;
-    [SerializeField]
-    private float m_Speed;
 }
